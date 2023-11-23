@@ -42,6 +42,7 @@ export const handlers = [
       //? 장바구니에 한번만 담기는 현상 -> 기존 바구니에 담긴 상품이 있으면 수량이 늘도록 수정 => 수정완료
       let existingItem = cart.get(item.id);
 
+      // 기존에 담긴 상품이 있으면 수량만 늘리고, 없으면 수량 1로 추가
       if (existingItem) {
         existingItem.quantity += 1;
       } else {

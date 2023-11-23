@@ -1,6 +1,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { GetCartFetcher } from "../../queryClient";
 import CartItem from "../../components/CartItem";
+import { useEffect } from 'react';
 
 export default function CartPage() {
   const queryClient = useQueryClient();
@@ -8,9 +9,13 @@ export default function CartPage() {
   const { data, error, isLoading } = useQuery({
     queryKey: ["carts"],
     queryFn: () => GetCartFetcher(),
-    staleTime: 0, 
-    cacheTime: 1000, 
   });
+
+  //? 데이터를 페이지에 들어갈때마다 불러올순 없을까 => useEffect 사용 invalidateQueries
+  //! 카트를 추가할때마다 데이터를 불러오고 싶으면 onMutate(optimistic) 방식을 사용
+  useEffect(() => {
+    queryClient.invalidateQueries("cart");
+  }, [queryClient]);
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;

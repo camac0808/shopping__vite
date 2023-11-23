@@ -3,9 +3,14 @@ import { AddToCartFetcher } from "../queryClient";
 import { useMutation } from "@tanstack/react-query";
 
 export default function AddToCart({ id, title, category, price, image }) {
-  const mutation = useMutation({
+  //? addToCartMutation.mutate()를 실행시키면 mutationFn()이 실행된다. mutation = 변화 
+  const addToCartMutation = useMutation({
     mutationKey: ["cart", id],
     mutationFn: () => AddToCartFetcher(newItem),
+    onSuccess: () => {
+      // 추가 완료 후 로직
+      console.log("Item added to cart:", newItem);
+    },
   });
   
   // Create a new item object
@@ -17,13 +22,8 @@ export default function AddToCart({ id, title, category, price, image }) {
     image,
   };
 
-  function handleAddCart() {
-    // recoil cart state items add new item
-    mutation.mutate(newItem);
-  }
-
   return (
-    <button className="product-item__button" onClick={handleAddCart}>
+    <button className="product-item__button" onClick={addToCartMutation.mutate}>
       담기
     </button>
   );
