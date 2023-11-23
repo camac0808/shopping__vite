@@ -1,0 +1,56 @@
+.products {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 10px;
+}
+
+.product-item {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+  list-style: none;
+  object-fit: cover;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+
+  &__image {
+    // 부모 요소의 width를 상속받아서 100%로 설정
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+  }
+  &__button {
+    cursor: pointer;
+    width: 100%;
+    color: white;
+    background-color: #3992ff;
+    font-size: 18px;
+    font-weight: 500;
+  }
+}
+
+.product-detail {
+  border: 1px solid #ccc;
+  width: 30%;
+  height: 500px;
+  margin: 0 auto;
+  margin-top: 50px;
+  padding: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  &__category {
+    font-size: 25px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: tomato;
+  }
+  &__image {
+    height: 150px;
+    object-fit: contain;
+    margin-bottom: 20px;
+  }
+}
