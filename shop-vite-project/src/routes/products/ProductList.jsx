@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { GetProductsFetcher } from "../../queryClient";
+import { GetProductsFetcher } from "../../UseQueryFetch";
 import ProductItem from "../../components/ProductItem";
 
 export default function ProductList() {

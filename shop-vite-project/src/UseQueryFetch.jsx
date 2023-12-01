@@ -41,7 +41,6 @@ export async function GetProductsDetailFetcher(id) {
   }
 }
 
-
 // 장바구니 상품 가져오기
 export async function GetCartFetcher() {
   const fetchOptions = {
@@ -54,14 +53,12 @@ export async function GetCartFetcher() {
   try {
     const response = await fetch(`${BASE_URL}/cart`, fetchOptions);
     const data = await response.json();
-    console.log(data)
-    return data
+    console.log(data);
+    return data;
   } catch (err) {
     throw new Error(err);
   }
 }
-
-
 
 // 장바구니에 상품 추가하기
 export async function AddToCartFetcher(newItem) {
@@ -86,3 +83,26 @@ export async function AddToCartFetcher(newItem) {
   }
 }
 
+// 장바구니 상품 갯수 증가 혹은 감소시키기
+
+export async function UpdateCartAmountFetcher({ id, amount }) {
+  const fetchOptions = {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    },
+    body: JSON.stringify({ id, amount }),
+  };
+  try {
+    if (amount < 1) return;
+
+    const response = await fetch(`http://127.0.0.1:5173/cart`, fetchOptions);
+    const data = await response.json();
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw new Error("An error occurred while fetching the data");
+  }
+}

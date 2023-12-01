@@ -1,18 +1,21 @@
 import { PropTypes } from "prop-types";
-import { AddToCartFetcher } from "../queryClient";
+import { AddToCartFetcher } from "../UseQueryFetch";
 import { useMutation } from "@tanstack/react-query";
 
 export default function AddToCart({ id, title, category, price, image }) {
-  //? addToCartMutation.mutate()를 실행시키면 mutationFn()이 실행된다. mutation = 변화 
+  //? mutation이 뭔가? => mutation = 변화 즉 update delete.. addToCartMutation.mutate()를 실행시키면 mutationFn()이 실행된다. 
+  //! onMutate : mutationFn() 실행 전에 실행되는 함수
+  //! onSuccess : mutationFn() 실행 후에 실행되는 함수
+
   const addToCartMutation = useMutation({
     mutationKey: ["cart", id],
     mutationFn: () => AddToCartFetcher(newItem),
-    onSuccess: () => {
-      // 추가 완료 후 로직
-      console.log("Item added to cart:", newItem);
+    onMutate: () => {
+      // 추가 전 로직
+      console.log("Mutation started");
     },
   });
-  
+
   // Create a new item object
   const newItem = {
     id,

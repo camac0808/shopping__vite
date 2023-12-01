@@ -2,11 +2,12 @@ import { products } from "./products";
 import { http, HttpResponse } from "msw";
 
 // 가짜 바구니 데이터
+// new Map은 key-value 쌍으로 이루어진 데이터구조로 각 상품을 고유한 item.id로 식별하여 저장할 수 있음
 const cart = new Map();
 let cartItemsArray = [];
 
 export const handlers = [
-  // get products
+  //* get products
   http.get("/products", () => {
     try {
       return HttpResponse.json(products, {
@@ -19,7 +20,7 @@ export const handlers = [
     }
   }),
 
-  // get product detail
+  //* get product detail
   http.get("/products/:id", (request) => {
     try {
       const { id } = request.params;
@@ -34,7 +35,7 @@ export const handlers = [
     }
   }),
 
-  // add to cart
+  //* Add to cart
   http.post("/cart", async ({ request }) => {
     try {
       let item = await request.json();
@@ -47,14 +48,14 @@ export const handlers = [
         existingItem.quantity += 1;
       } else {
         item = { ...item, quantity: 1 };
-        //? NEW MAP() => MAP(1) {ITEM.ID => {...VALUES}}
+        //? new Map() => {item.id => {...values}}
         cart.set(item.id, item);
-        console.log(cart)
+        console.log(cart);
       }
-      
-      //? NEW ARRAY() => ARRAY(1) [{...VALUES}] 
+
+      //? new Array() => [{...values}]
       cartItemsArray = [...cart.values()];
-      console.log("Item added to cart:", cart);
+      console.log("Handler: item added to cart:", cart);
 
       return HttpResponse.json(item, {
         status: 200,
@@ -66,7 +67,7 @@ export const handlers = [
     }
   }),
 
-  // get cart products
+  //* get cart products
   http.get("/cart", () => {
     console.log("Getting cart:", cartItemsArray);
     try {
@@ -78,9 +79,36 @@ export const handlers = [
     }
   }),
 
-  // remove from cart
-  http.delete("/cart/:id", (req, res, ctx) => {
-    const { id } = req.params;
-    return res(ctx.json({ id }), ctx.status(200));
+  //* 해당 아이템의 id와 quantity를 받아서 해당 아이템의 quantity를 수정
+  http.put("/cart", async ({ request }) => {
+    try {
+      const item = await request.json();
+      cart.set(item.id, { ...cart.get(item.id), quantity: item.amount });
+      cartItemsArray = [...cart.values()];
+
+      console.log("Handler: item quantity updated:", cart);
+      return HttpResponse.json(item, {
+        status: 200,
+      });
+    } catch (error) {
+      return HttpResponse.json({ message: "An error occurred updating the cart" }, 500);
+    }
+  }),
+
+  //* 해당 아이템의 id를 받아서 해당 아이템을 삭제
+  http.delete("/cart", async ({ request }) => {
+    try {
+      const { id } = await request.json();
+      console.log("handler", id);
+      cart.delete(Number(id));
+      cartItemsArray = [...cart.values()]; 
+
+      console.log("Handler: item deleted from cart:", cart);
+      return HttpResponse.json({ message: "Item deleted from cart" }, {
+        status: 200,
+      });
+    } catch (error) {
+      return HttpResponse.json({ message: "An error occurred deleting the item from the cart" }, 500);
+    }
   }),
 ];

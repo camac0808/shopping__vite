@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { GetProductsDetailFetcher } from "../../queryClient";
+import { GetProductsDetailFetcher } from "../../UseQueryFetch";
 import { useQuery } from "@tanstack/react-query";
 import ProductDetail from '../../components/ProductDetail';
 
